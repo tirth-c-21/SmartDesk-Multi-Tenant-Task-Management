@@ -1,0 +1,44 @@
+services:
+  smartdesk:
+    build: .
+    container_name: smartdesk-app
+    ports:
+      - "2104:2104"
+    depends_on:
+      - postgres
+    networks:
+      - s-network
+    environment:
+     SERVER_PORT: 2104
+     JWT_SECRET: ${JWT_SECRET}
+     JWT_EXPIRATION: ${JWT_EXPIRATION}
+     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/SmartDeskDatabase
+     SPRING_DATASOURCE_USERNAME: postgres
+     SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+     SPRING_MAIL_HOST: smtp.gmail.com
+     SPRING_MAIL_PORT: 587
+     SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+     SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
+     SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+     SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: SmartDeskDatabase
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-s-data:/var/lib/postgresql/data
+    networks:
+      - s-network
+
+networks:
+  s-network:
+    driver: bridge
+
+volumes:
+  postgres-s-data:

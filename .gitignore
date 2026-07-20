@@ -1,0 +1,11 @@
+# Sensitive config
+src/main/resources/application.properties
+.env
+
+# Compiled output
+target/
+
+# IDE files
+.idea/
+*.iml
+*.class
